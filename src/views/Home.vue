@@ -1,3 +1,15 @@
 <template>
-  <div>home</div>
+  <div>
+    <el-button type="info" @click="logout">退出登录</el-button>
+  </div>
 </template>
+<script>
+export default {
+  methods: {
+    logout() {
+      sessionStorage.removeItem('token')
+      this.$router.push('/login')
+    },
+  },
+}
+</script>
