@@ -1,6 +1,11 @@
 @url=https://www.liulongbin.top:8888/api/private/v1/
 ###
-get {{url}}list
+get {{url}}users
+{
+          "query": "",
+        "pagenum": 1,
+        "pagesize": 5,
+}
 
 ###
 post {{url}}login
