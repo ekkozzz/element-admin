@@ -28,10 +28,8 @@
         </el-table-column>
         <el-table-column label="排序">
           <template #default="scope">
-            <el-tag type="success" v-if="scope.row.cat_level === 0"
-              >等级一</el-tag
-            >
-            <el-tag type="info" v-else-if="scope.row.cat_level === 1"
+            <el-tag v-if="scope.row.cat_level === 0">等级一</el-tag>
+            <el-tag type="success" v-else-if="scope.row.cat_level === 1"
               >等级二</el-tag
             >
             <el-tag type="warning" v-else>等级三</el-tag>
