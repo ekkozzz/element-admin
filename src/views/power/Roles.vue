@@ -258,7 +258,7 @@ export default {
       })
     },
     async deleteRole(id) {
-      const confirm = await this.$confirm('是否删除该用户, 是否继续?', '提示', {
+      const confirm = await this.$confirm('是否删除该角色, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
