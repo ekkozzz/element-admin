@@ -6,7 +6,9 @@
       <el-breadcrumb-item>用户列表</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="table-box">
-      <el-button type="primary">添加角色</el-button>
+      <el-button type="primary" @click="dialogVisible = true"
+        >添加角色</el-button
+      >
       <el-table :data="rolesList" border stripe>
         <el-table-column type="expand">
           <template #default="scope">
@@ -58,10 +60,18 @@
         <el-table-column prop="roleDesc" label="角色描述"></el-table-column>
         <el-table-column label="操作" width="300px">
           <template #default="scope">
-            <el-button type="primary" size="mini" icon="el-icon-edit"
+            <el-button
+              type="primary"
+              size="mini"
+              icon="el-icon-edit"
+              @click="showDialogVisible(scope.row.id)"
               >编辑</el-button
             >
-            <el-button type="danger" size="mini" icon="el-icon-delete"
+            <el-button
+              type="danger"
+              size="mini"
+              icon="el-icon-delete"
+              @click="deleteRole(scope.row.id)"
               >删除</el-button
             >
             <el-button
@@ -91,6 +101,35 @@
         <el-button type="primary" @click="allotRigths()">确 定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog
+      :title="roleId ? '编辑用户' : '添加用户'"
+      :visible.sync="dialogVisible"
+      @close="dialogClosed"
+    >
+      <el-form
+        :model="ruleForm"
+        :rules="rules"
+        ref="ruleForm"
+        label-width="100px"
+      >
+        <el-form-item label="角色名称" prop="roleName">
+          <el-input v-model="ruleForm.roleName"></el-input>
+        </el-form-item>
+        <el-form-item label="角色描述">
+          <el-input v-model="ruleForm.roleDesc"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addRole" v-show="!roleId"
+          >确 定</el-button
+        >
+        <el-button type="primary" @click="editRole" v-show="roleId"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -107,6 +146,16 @@ export default {
       },
       defKeys: [],
       roleId: '',
+      dialogVisible: false,
+      ruleForm: {
+        roleName: '',
+        roleDesc: '',
+      },
+      rules: {
+        roleName: [
+          { required: true, message: '请输入活动名称', trigger: 'blur' },
+        ],
+      },
     }
   },
   created() {
@@ -117,7 +166,6 @@ export default {
       const { data: res } = await this.$http.get('roles')
       console.log(res)
       this.rolesList = res.data
-      if (res.meta.msg) this.$message.success(res.meta.msg)
     },
     async removeRightById(role, rightId) {
       const confirm = await this.$confirm('是否删除该用户, 是否继续?', '提示', {
@@ -166,6 +214,62 @@ export default {
       if (res.meta.msg) this.$message.success(res.meta.msg)
       this.getRolesList()
       this.setRightDialogVisible = false
+    },
+    async showDialogVisible(id) {
+      if (id) {
+        this.roleId = id
+        const { data: res } = await this.$http.get('roles/' + this.roleId)
+        console.log(res)
+        this.ruleForm.roleName = res.data.roleName
+        this.ruleForm.roleDesc = res.data.roleDesc
+      }
+      this.dialogVisible = true
+    },
+    editRole() {
+      this.$refs.ruleForm.validate(async (vaild) => {
+        if (!vaild) return
+        const { data: res } = await this.$http.put('roles/' + this.roleId, {
+          ...this.ruleForm,
+        })
+        if (res.meta.msg) this.$message.success(res.meta.msg)
+        this.roleId = ''
+        this.ruleForm.roleName = ''
+        this.ruleForm.roleDesc = ''
+        this.dialogVisible = false
+        this.getRolesList()
+      })
+    },
+    dialogClosed() {
+      this.$refs.ruleForm.resetFields()
+      this.roleId = ''
+      this.ruleForm.roleName = ''
+      this.ruleForm.roleDesc = ''
+    },
+    addRole() {
+      this.$refs.ruleForm.validate(async (vaild) => {
+        if (!vaild) return
+        const { data: res } = await this.$http.post('roles', {
+          ...this.ruleForm,
+        })
+        console.log(res)
+        if (res.meta.msg) this.$message.success(res.meta.msg)
+        this.dialogVisible = false
+        this.getRolesList()
+      })
+    },
+    async deleteRole(id) {
+      const confirm = await this.$confirm('是否删除该用户, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).catch((err) => err)
+      if (confirm !== 'confirm') {
+        return this.$message.info('已取消删除')
+      }
+      const { data: res } = await this.$http.delete('roles/' + id)
+      console.log(res)
+      this.$message.success(res.meta.msg)
+      this.getRolesList()
     },
   },
 }
