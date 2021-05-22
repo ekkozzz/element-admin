@@ -40,6 +40,11 @@ const routes = [
         path: '/roles',
         component: () => import('../views/power/Roles.vue'),
       },
+      {
+        path: '/categories',
+        name: '商品分类',
+        component: () => import('../views/goods/Cate.vue'),
+      },
     ],
   },
 ]
