@@ -30,7 +30,7 @@
         >
       </el-row>
     </div>
-    <el-table :data="userlist" v-if="userlist" stripe>
+    <el-table :data="userlist" v-if="userlist" v-loading="loading" stripe>
       <el-table-column type="index" label="#"> </el-table-column>
       <el-table-column prop="username" label="用户名"> </el-table-column>
       <el-table-column prop="email" label="邮箱"> </el-table-column>
@@ -59,12 +59,21 @@
             icon="el-icon-delete"
             @click="deleteUser(scope.row.id)"
           ></el-button>
-          <el-button
-            type="warning"
-            size="mini"
-            icon="el-icon-setting"
-            @click="setRole(scope.row)"
-          ></el-button>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="分配角色"
+            placement="top"
+            :enterable="false"
+          >
+            <el-button
+              type="warning"
+              size="mini"
+              icon="el-icon-setting"
+              @click="setRole(scope.row)"
+            >
+            </el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -261,6 +270,7 @@ export default {
       userInfo: {},
       roleList: [],
       selectRoleId: '',
+      loading: true,
     }
   },
   created() {
@@ -273,6 +283,7 @@ export default {
       })
       this.userlist = res.data.users
       this.total = res.data.total
+      this.loading = false
       console.log(res)
     },
     handleSizeChange(newSize) {
