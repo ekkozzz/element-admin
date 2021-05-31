@@ -126,3 +126,7 @@ table {
 #app {
   min-width: 1366px;
 }
+
+.el-card {
+  margin-top: 20px;
+}

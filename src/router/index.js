@@ -50,6 +50,16 @@ const routes = [
         name: '参数列表',
         component: () => import('../views/goods/Params.vue'),
       },
+      {
+        path: '/goods',
+        name: '商品列表',
+        component: () => import('../views/goods/List.vue'),
+      },
+      {
+        path: '/goods/add',
+        name: '添加商品',
+        component: () => import('../views/goods/Add.vue'),
+      },
     ],
   },
 ]

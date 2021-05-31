@@ -9,7 +9,7 @@
       <el-button type="primary" @click="dialogVisible = true"
         >添加角色</el-button
       >
-      <el-table :data="rolesList" border stripe>
+      <el-table :data="rolesList" border stripe v-loading="isLoading">
         <el-table-column type="expand">
           <template #default="scope">
             <el-row
@@ -156,6 +156,7 @@ export default {
           { required: true, message: '请输入活动名称', trigger: 'blur' },
         ],
       },
+      isLoading: true,
     }
   },
   created() {
@@ -166,6 +167,7 @@ export default {
       const { data: res } = await this.$http.get('roles')
       console.log(res)
       this.rolesList = res.data
+      this.isLoading = false
     },
     async removeRightById(role, rightId) {
       const confirm = await this.$confirm('是否删除该用户, 是否继续?', '提示', {

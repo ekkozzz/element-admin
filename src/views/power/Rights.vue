@@ -7,7 +7,7 @@
       >
       <el-breadcrumb-item>权限列表</el-breadcrumb-item>
     </el-breadcrumb>
-    <el-table :data="rightsList" border stripe>
+    <el-table :data="rightsList" border stripe v-loading="isLoading">
       <el-table-column type="index" label="#"></el-table-column>
       <el-table-column prop="authName" label="权限"></el-table-column>
       <el-table-column prop="path" label="路径"></el-table-column>
@@ -29,6 +29,7 @@ export default {
   data() {
     return {
       rightsList: [],
+      isLoading: true,
     }
   },
   created() {
@@ -39,8 +40,9 @@ export default {
       const { data: res } = await this.$http.get('rights/list')
       console.log(res)
       this.rightsList = res.data
-      if (res.meta.msg) {
-        this.$message.success(res.meta.msg)
+      this.isLoading = false
+      if (res.meta.status !== 200) {
+        this.$message.error(res.meta.msg)
       }
     },
   },

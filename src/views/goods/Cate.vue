@@ -7,7 +7,7 @@
       >
       <el-breadcrumb-item>分类列表</el-breadcrumb-item>
     </el-breadcrumb>
-    <div class="table-box">
+    <el-card class="table-box">
       <el-button type="primary" size="default" @click="showAddCateDialog"
         >添加分类</el-button
       >
@@ -15,7 +15,7 @@
         :data="cateList"
         row-key="cat_id"
         border
-        lazy
+        v-loading="isLoading"
         :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       >
         <el-table-column type="index" label="#"></el-table-column>
@@ -64,7 +64,7 @@
         :total="total"
       >
       </el-pagination>
-    </div>
+    </el-card>
 
     <el-dialog
       :title="cid ? '编辑分类' : '添加分类'"
@@ -137,6 +137,7 @@ export default {
       },
       selectKeys: [],
       cid: null,
+      isLoading: true,
     }
   },
   created() {
@@ -151,6 +152,7 @@ export default {
       if (res.meta.status !== 200) return this.$message.error('获取列表失败')
       this.cateList = res.data.result
       this.total = res.data.total
+      this.isLoading = false
     },
     handleSizeChange(newPage) {
       this.queryInfo.pagesize = newPage
@@ -245,9 +247,9 @@ export default {
 
 <style lang="less" scoped>
 .table-box {
-  margin-top: 40px;
-  & > .el-button {
-    margin-bottom: 20px;
+  margin-top: 20px;
+  .el-table {
+    margin-top: 20px;
   }
   .el-icon-success {
     color: #67c23a;
