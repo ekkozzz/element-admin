@@ -55,6 +55,7 @@
                 :options="cateList"
                 :props="cateProps"
                 @change="handleChange"
+                :disabled="isDisabled"
               ></el-cascader>
             </el-form-item>
           </el-tab-pane>
@@ -169,6 +170,7 @@ export default {
   },
   created() {
     this.getCateList()
+    this.getGoodData()
   },
   methods: {
     async getCateList() {
@@ -186,7 +188,11 @@ export default {
       }
     },
     beforeTabLeave(activeName, oldActiveName) {
-      if (oldActiveName === '0' && this.addForm.goods_cat.length !== 3) {
+      if (
+        oldActiveName === '0' &&
+        this.addForm.goods_cat.length !== 3 &&
+        !this.goodId
+      ) {
         this.$message.error('请选择商品分类')
         return false
       }
@@ -269,6 +275,13 @@ export default {
         this.$router.push('/goods')
       })
     },
+    async getGoodData() {
+      if (this.goodId) {
+        const { data: res } = await this.$http.get(`goods/${this.goodId}`)
+        console.log(res)
+        this.addForm = res.data
+      }
+    },
   },
   computed: {
     cateId() {
@@ -276,6 +289,18 @@ export default {
         return this.addForm.goods_cat[2]
       }
       return null
+    },
+    goodId() {
+      if (this.$route.params.id) {
+        return this.$route.params.id
+      }
+      return false
+    },
+    isDisabled() {
+      if (this.goodId) {
+        return true
+      }
+      return false
     },
   },
 }

@@ -9,3 +9,7 @@
 .ql-editor {
   min-height: 300px;
 }
+
+.el-table {
+  margin: 20px 0;
+}

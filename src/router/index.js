@@ -60,6 +60,16 @@ const routes = [
         name: '添加商品',
         component: () => import('../views/goods/Add.vue'),
       },
+      {
+        path: '/goods/edit/:id',
+        name: '修改商品',
+        component: () => import('../views/goods/Add.vue'),
+      },
+      {
+        path: '/orders',
+        name: '订单列表',
+        component: () => import('../views/order/Order.vue'),
+      },
     ],
   },
 ]
