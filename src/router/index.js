@@ -70,6 +70,11 @@ const routes = [
         name: '订单列表',
         component: () => import('../views/order/Order.vue'),
       },
+      {
+        path: '/reports',
+        name: '数据报表',
+        component: () => import('../views/report/Report.vue'),
+      },
     ],
   },
 ]

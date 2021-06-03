@@ -3,7 +3,7 @@
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ path: '/welcome' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item :to="{ path: $route.path }"
-        >商品管理</el-breadcrumb-item
+        >订单管理</el-breadcrumb-item
       >
       <el-breadcrumb-item>{{ $route.name }}</el-breadcrumb-item>
     </el-breadcrumb>
